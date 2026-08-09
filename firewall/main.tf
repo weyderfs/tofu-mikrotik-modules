@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   ha_port = lookup(var.server_ports, "ha", "8123")
   dns_udp_port = lookup(var.dns_ports, "udp", "53")

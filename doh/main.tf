@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   dns_servers = coalesce(var.servers, var.doh_upstream_addresses)
 }
@@ -17,13 +26,6 @@ resource "routeros_ip_dns" "doh" {
   max_udp_packet_size   = var.max_udp_packet_size
   query_server_timeout    = var.query_server_timeout
   query_total_timeout     = var.query_total_timeout
-
-  lifecycle {
-    ignore_changes = [
-      cache_used,
-      dynamic_servers,
-    ]
-  }
 }
 
 output "dns_config_id" {

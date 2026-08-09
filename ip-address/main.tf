@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   default_comment = format("IP address for %s", var.vlan_interface)
   comment         = coalesce(var.comment, local.default_comment)

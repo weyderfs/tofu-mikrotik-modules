@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   is_trunk          = length(var.tagged_vlans) > 0
   frame_types_value = local.is_trunk ? "admit-only-vlan-tagged" : "admit-only-untagged-and-priority-tagged"
@@ -34,33 +43,6 @@ resource "routeros_interface_bridge_port" "this" {
   trusted           = var.trusted
   unknown_multicast_flood = var.unknown_multicast_flood
   unknown_unicast_flood   = var.unknown_unicast_flood
-
-  lifecycle {
-    ignore_changes = [
-      designated_bridge,
-      designated_bridge_id,
-      designated_cost,
-      designated_port_id,
-      designated_port_number,
-      dynamic,
-      edge_port,
-      external_fdb_status,
-      forwarding,
-      hw_offload,
-      hw_offload_group,
-      id,
-      inactive,
-      last_topology_change,
-      learning,
-      nextid,
-      point_to_point_port,
-      port_id,
-      role,
-      root_path_cost,
-      sending_rstp,
-      status,
-    ]
-  }
 }
 
 output "bridge_port_id" {

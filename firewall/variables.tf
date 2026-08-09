@@ -35,9 +35,9 @@ variable "server_ports" {
 }
 
 variable "dns_ports" {
-  description = "DNS ports to use (default: 53)"
-  type        = list(string)
-  default     = ["53"]
+  description = "DNS ports to use, mapped by protocol (default: 53)"
+  type        = map(string)
+  default     = { udp = "53", tcp = "53" }
 }
 
 variable "icmp_accept" {

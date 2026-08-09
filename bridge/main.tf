@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   comment  = coalesce(var.comment, format("Bridge %s", var.bridge_name))
   use_auto_mac = var.auto_mac && var.admin_mac == null
@@ -38,17 +47,6 @@ resource "routeros_interface_bridge" "home" {
   startup_query_count = var.startup_query_count
   startup_query_interval = var.startup_query_interval
   transmit_hold_count = var.transmit_hold_count
-
-  lifecycle {
-    ignore_changes = [
-      # RouterOS auto-updates some values
-      actual_mtu,
-      dynamic,
-      l2mtu,
-      mac_address,
-      running,
-    ]
-  }
 }
 
 output "bridge_name" {

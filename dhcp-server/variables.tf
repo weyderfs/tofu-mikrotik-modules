@@ -23,6 +23,12 @@ variable "gateway" {
   type        = string
 }
 
+variable "next_pool" {
+  description = "IP pool to use when this pool is exhausted (fallback)"
+  type        = string
+  default     = null
+}
+
 variable "dns_servers" {
   description = "List of DNS server IPs handed out via DHCP"
   type        = list(string)

@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   default_comment = format("VLAN %d - %s", var.vlan_id, var.vlan_name)
   vlan_comment    = coalesce(var.comment, local.default_comment)
@@ -15,16 +24,6 @@ resource "routeros_interface_vlan" "this" {
   hw_offloaded = var.hw_offloaded
   mvrp      = var.mvrp
   use_service_tag = var.use_service_tag
-
-  lifecycle {
-    ignore_changes = [
-      dynamic,
-      l2mtu,
-      loop_protect_status,
-      mac_address,
-      running,
-    ]
-  }
 }
 
 output "vlan_interface" {

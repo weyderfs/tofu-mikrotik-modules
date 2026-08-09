@@ -1,5 +1,13 @@
+mock_provider "routeros" {
+  alias = "mock"
+}
+
 run "validate_plan" {
   command = plan
+
+  providers = {
+    routeros = routeros.mock
+  }
 
   variables {
     port_name    = "ether5"

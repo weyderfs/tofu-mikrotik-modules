@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    routeros = {
+      source  = "terraform-routeros/routeros"
+      version = ">= 1.99.1"
+    }
+  }
+}
+
 locals {
   pool_comment         = coalesce(var.pool_comment, format("DHCP pool for %s", var.vlan_name))
   dhcp_server_comment  = coalesce(var.dhcp_server_comment, format("DHCP server for %s", var.vlan_name))
@@ -6,7 +15,7 @@ locals {
 
 resource "routeros_ip_pool" "this" {
   name    = format("pool-%s", var.vlan_name)
-  ranges  = var.dhcp_range
+  ranges  = [var.dhcp_range]
   comment = local.pool_comment
   next_pool = var.next_pool
 }
@@ -56,8 +65,8 @@ resource "routeros_ip_dhcp_server_network" "this" {
   netmask             = var.netmask
   next_server         = var.next_server
   ntp_none            = var.ntp_none
-  ntp_servers         = var.ntp_servers
-  wins_servers        = var.wins_servers
+  ntp_server          = var.ntp_servers
+  wins_server         = var.wins_servers
 
   depends_on = [routeros_ip_dhcp_server.this]
 }
