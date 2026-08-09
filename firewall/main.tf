@@ -1,18 +1,3 @@
-terraform {
-  required_providers {
-    routeros = {
-      source  = "terraform-routeros/routeros"
-      version = ">= 1.99.1"
-    }
-  }
-}
-
-locals {
-  ha_port = lookup(var.server_ports, "ha", "8123")
-  dns_udp_port = lookup(var.dns_ports, "udp", "53")
-  dns_tcp_port = lookup(var.dns_ports, "tcp", "53")
-}
-
 resource "routeros_ip_firewall_filter" "input_established" {
   chain            = "input"
   action           = "accept"
@@ -87,7 +72,7 @@ resource "routeros_ip_firewall_filter" "iot_ha" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "tcp"
-  dst_port    = local.ha_port
+    dst_port    = lookup(var.server_ports, "ha", "8123")
   comment     = "Allow IoT -> Home Assistant"
 }
 
@@ -97,7 +82,7 @@ resource "routeros_ip_firewall_filter" "iot_dns_udp" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "udp"
-  dst_port    = local.dns_udp_port
+    dst_port    = lookup(var.dns_ports, "udp", "53")
   comment     = "Allow IoT -> DNS (UDP)"
 }
 
@@ -107,7 +92,7 @@ resource "routeros_ip_firewall_filter" "iot_dns_tcp" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "tcp"
-  dst_port    = local.dns_tcp_port
+    dst_port    = lookup(var.dns_ports, "tcp", "53")
   comment     = "Allow IoT -> DNS (TCP)"
 }
 
@@ -187,17 +172,4 @@ resource "routeros_ip_firewall_nat" "masquerade_guest" {
   src_address   = var.guest_subnet
   out_interface = var.wan_interface
   comment       = "NAT masquerade Guest"
-}
-
-output "filter_rules_applied" {
-  description = "Number of filter rules provisioned"
-  value = (
-    4   # input chain
-    + 12  # forward chain
-  )
-}
-
-output "nat_rules_applied" {
-  description = "Number of NAT masquerade rules provisioned"
-  value       = 3
 }

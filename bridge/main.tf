@@ -1,24 +1,10 @@
-terraform {
-  required_providers {
-    routeros = {
-      source  = "terraform-routeros/routeros"
-      version = ">= 1.99.1"
-    }
-  }
-}
-
-locals {
-  comment  = coalesce(var.comment, format("Bridge %s", var.bridge_name))
-  use_auto_mac = var.auto_mac && var.admin_mac == null
-}
-
 resource "routeros_interface_bridge" "home" {
   name           = var.bridge_name
   vlan_filtering = var.vlan_filtering
-  comment        = local.comment
+  comment        = var.comment
   disabled       = var.disabled
   admin_mac      = var.admin_mac
-  auto_mac       = local.use_auto_mac
+  auto_mac       = var.auto_mac && var.admin_mac == null
   ageing_time    = var.ageing_time
   arp            = var.arp
   arp_timeout    = var.arp_timeout
@@ -47,9 +33,4 @@ resource "routeros_interface_bridge" "home" {
   startup_query_count = var.startup_query_count
   startup_query_interval = var.startup_query_interval
   transmit_hold_count = var.transmit_hold_count
-}
-
-output "bridge_name" {
-  description = "Name of the created bridge"
-  value       = routeros_interface_bridge.home.name
 }

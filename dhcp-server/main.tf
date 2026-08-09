@@ -1,22 +1,7 @@
-terraform {
-  required_providers {
-    routeros = {
-      source  = "terraform-routeros/routeros"
-      version = ">= 1.99.1"
-    }
-  }
-}
-
-locals {
-  pool_comment         = coalesce(var.pool_comment, format("DHCP pool for %s", var.vlan_name))
-  dhcp_server_comment  = coalesce(var.dhcp_server_comment, format("DHCP server for %s", var.vlan_name))
-  dhcp_network_comment = coalesce(var.dhcp_network_comment, format("DHCP network for %s", var.vlan_name))
-}
-
 resource "routeros_ip_pool" "this" {
   name    = format("pool-%s", var.vlan_name)
   ranges  = [var.dhcp_range]
-  comment = local.pool_comment
+  comment = var.pool_comment
   next_pool = var.next_pool
 }
 
@@ -26,7 +11,7 @@ resource "routeros_ip_dhcp_server" "this" {
   address_pool          = routeros_ip_pool.this.name
   lease_time            = var.lease_time
   disabled              = var.disabled
-  comment               = local.dhcp_server_comment
+  comment               = var.dhcp_server_comment
   add_arp               = var.add_arp
   address_lists         = var.address_lists
   allow_dual_stack_queue = var.allow_dual_stack_queue
@@ -56,7 +41,7 @@ resource "routeros_ip_dhcp_server_network" "this" {
   address             = var.vlan_subnet
   gateway             = var.gateway
   dns_server          = var.dns_servers
-  comment             = local.dhcp_network_comment
+  comment             = var.dhcp_network_comment
   boot_file_name      = var.boot_file_name
   caps_manager        = var.caps_manager
   dhcp_option         = var.dhcp_option
@@ -69,14 +54,4 @@ resource "routeros_ip_dhcp_server_network" "this" {
   wins_server         = var.wins_servers
 
   depends_on = [routeros_ip_dhcp_server.this]
-}
-
-output "dhcp_server_name" {
-  description = "Name of the DHCP server instance"
-  value       = routeros_ip_dhcp_server.this.name
-}
-
-output "ip_pool_name" {
-  description = "Name of the IP pool"
-  value       = routeros_ip_pool.this.name
 }

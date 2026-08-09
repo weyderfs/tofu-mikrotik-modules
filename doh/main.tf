@@ -1,20 +1,7 @@
-terraform {
-  required_providers {
-    routeros = {
-      source  = "terraform-routeros/routeros"
-      version = ">= 1.99.1"
-    }
-  }
-}
-
-locals {
-  dns_servers = coalesce(var.servers, var.doh_upstream_addresses)
-}
-
 resource "routeros_ip_dns" "doh" {
   allow_remote_requests = var.allow_remote_requests
   use_doh_server        = var.doh_upstream_url
-  servers               = local.dns_servers
+  servers               = coalesce(var.servers, var.doh_upstream_addresses)
   verify_doh_cert       = var.verify_doh_cert
   cache_max_ttl         = var.cache_max_ttl
   cache_size            = var.cache_size
@@ -26,9 +13,4 @@ resource "routeros_ip_dns" "doh" {
   max_udp_packet_size   = var.max_udp_packet_size
   query_server_timeout    = var.query_server_timeout
   query_total_timeout     = var.query_total_timeout
-}
-
-output "dns_config_id" {
-  description = "Resource ID of the DNS configuration"
-  value       = routeros_ip_dns.doh.id
 }

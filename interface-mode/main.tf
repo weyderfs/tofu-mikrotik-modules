@@ -1,25 +1,9 @@
-terraform {
-  required_providers {
-    routeros = {
-      source  = "terraform-routeros/routeros"
-      version = ">= 1.99.1"
-    }
-  }
-}
-
-locals {
-  is_trunk          = length(var.tagged_vlans) > 0
-  frame_types_value = local.is_trunk ? "admit-only-vlan-tagged" : "admit-only-untagged-and-priority-tagged"
-  default_comment   = local.is_trunk ? "Trunk port - VLANs: ${join(",", var.tagged_vlans)}" : "Access port - VLAN ${var.pvid}"
-  comment           = coalesce(var.comment, local.default_comment)
-}
-
 resource "routeros_interface_bridge_port" "this" {
   bridge            = var.bridge_name
   interface         = var.port_name
   pvid              = var.pvid
-  frame_types       = local.frame_types_value
-  comment           = local.comment
+  frame_types       = var.frame_types
+  comment           = var.comment
   disabled          = var.disabled
   auto_isolate      = var.auto_isolate
   bpdu_guard        = var.bpdu_guard
@@ -43,9 +27,4 @@ resource "routeros_interface_bridge_port" "this" {
   trusted           = var.trusted
   unknown_multicast_flood = var.unknown_multicast_flood
   unknown_unicast_flood   = var.unknown_unicast_flood
-}
-
-output "bridge_port_id" {
-  description = "Resource ID of the bridge port configuration"
-  value       = routeros_interface_bridge_port.this.id
 }
