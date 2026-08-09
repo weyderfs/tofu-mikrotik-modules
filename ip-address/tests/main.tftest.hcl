@@ -1,19 +1,19 @@
 run "validate_plan" {
   command = plan
 
-  variables = {
+  variables {
     vlan_interface = "bridge-home-vlan10"
-    address        = "[IP_ADDRESS]/25"
-    network        = "[IP_ADDRESS]"
+    address        = "192.168.10.2/25"
+    network        = "192.168.10.0"
   }
 
   assert {
-    function = "planned_values"
-    expression = {
-      "routeros_ip_address.this" = {
-        address   = "[IP_ADDRESS]/25"
-        interface = "bridge-home-vlan10"
-      }
-    }
+    condition     = routeros_ip_address.this.address == "192.168.10.2/25"
+    error_message = "ip address should be '192.168.10.2/25'"
+  }
+
+  assert {
+    condition     = routeros_ip_address.this.interface == "bridge-home-vlan10"
+    error_message = "ip address interface should be 'bridge-home-vlan10'"
   }
 }
