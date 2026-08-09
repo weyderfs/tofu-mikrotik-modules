@@ -163,3 +163,62 @@ variable "unknown_unicast_flood" {
   type        = bool
   default     = null
 }
+
+variable "factory_name" {
+  description = "Factory identifier of the physical port (e.g. ether2)"
+  type        = string
+}
+
+variable "ethernet_comment" {
+  description = "Comment for the ethernet interface"
+  type        = string
+  default     = null
+}
+
+variable "poe_out" {
+  description = "PoE output mode: off, auto-on, forced-on"
+  type        = string
+  default     = null
+}
+
+variable "poe_priority" {
+  description = "PoE priority (lower number = higher priority)"
+  type        = number
+  default     = null
+}
+
+variable "poe_voltage" {
+  description = "Manual PoE voltage control"
+  type        = string
+  default     = null
+}
+
+variable "poe_lldp_enabled" {
+  description = "Enable LLDP for PoE management"
+  type        = bool
+  default     = null
+}
+
+variable "power_cycle_interval" {
+  description = "Interval between PoE power cycles"
+  type        = string
+  default     = null
+}
+
+variable "power_cycle_ping_address" {
+  description = "Address to monitor for PoE watchdog"
+  type        = string
+  default     = null
+}
+
+variable "power_cycle_ping_enabled" {
+  description = "Enable PoE ping watchdog"
+  type        = bool
+  default     = null
+}
+
+variable "power_cycle_ping_timeout" {
+  description = "Timeout for PoE ping watchdog"
+  type        = string
+  default     = null
+}
