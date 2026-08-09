@@ -1,175 +1,135 @@
-resource "routeros_ip_firewall_filter" "input_established" {
-  chain            = "input"
-  action           = "accept"
-  connection_state = "established,related"
-  comment          = "Accept established and related input"
+resource "routeros_ip_firewall_filter" "this" {
+  for_each = { for i, r in var.filter_rules : tostring(i) => r }
+
+  action                   = each.value.action
+  chain                    = each.value.chain
+  address_list             = each.value.address_list
+  address_list_timeout     = each.value.address_list_timeout
+  comment                  = each.value.comment
+  connection_bytes         = each.value.connection_bytes
+  connection_limit         = each.value.connection_limit
+  connection_mark          = each.value.connection_mark
+  connection_nat_state     = each.value.connection_nat_state
+  connection_rate          = each.value.connection_rate
+  connection_state         = each.value.connection_state
+  connection_type          = each.value.connection_type
+  content                  = each.value.content
+  disabled                 = each.value.disabled
+  dscp                     = each.value.dscp
+  dst_address              = each.value.dst_address
+  dst_address_list         = each.value.dst_address_list
+  dst_address_type         = each.value.dst_address_type
+  dst_limit                = each.value.dst_limit
+  dst_port                 = each.value.dst_port
+  fragment                 = each.value.fragment
+  hotspot                  = each.value.hotspot
+  hw_offload               = each.value.hw_offload
+  icmp_options             = each.value.icmp_options
+  in_bridge_port           = each.value.in_bridge_port
+  in_bridge_port_list      = each.value.in_bridge_port_list
+  in_interface             = each.value.in_interface
+  in_interface_list        = each.value.in_interface_list
+  ingress_priority         = each.value.ingress_priority
+  ipsec_policy             = each.value.ipsec_policy
+  ipv4_options             = each.value.ipv4_options
+  jump_target              = each.value.jump_target
+  layer7_protocol          = each.value.layer7_protocol
+  limit                    = each.value.limit
+  log                      = each.value.log
+  log_prefix               = each.value.log_prefix
+  nth                      = each.value.nth
+  out_bridge_port          = each.value.out_bridge_port
+  out_bridge_port_list     = each.value.out_bridge_port_list
+  out_interface            = each.value.out_interface
+  out_interface_list       = each.value.out_interface_list
+  packet_mark              = each.value.packet_mark
+  packet_size              = each.value.packet_size
+  per_connection_classifier = each.value.per_connection_classifier
+  place_before             = each.value.place_before
+  port                     = each.value.port
+  priority                 = each.value.priority
+  protocol                 = each.value.protocol
+  psd                      = each.value.psd
+  random                   = each.value.random
+  reject_with              = each.value.reject_with
+  routing_mark             = each.value.routing_mark
+  routing_table            = each.value.routing_table
+  src_address              = each.value.src_address
+  src_address_list         = each.value.src_address_list
+  src_address_type         = each.value.src_address_type
+  src_mac_address          = each.value.src_mac_address
+  src_port                 = each.value.src_port
+  tcp_flags                = each.value.tcp_flags
+  tcp_mss                  = each.value.tcp_mss
+  time                     = each.value.time
+  tls_host                 = each.value.tls_host
+  ttl                      = each.value.ttl
 }
 
-resource "routeros_ip_firewall_filter" "input_icmp" {
-  chain      = "input"
-  action     = "accept"
-  protocol   = "icmp"
-  comment    = "Accept ICMP input"
-  disabled   = var.icmp_accept ? false : null
-}
+resource "routeros_ip_firewall_nat" "this" {
+  for_each = { for i, r in var.nat_rules : tostring(i) => r }
 
-resource "routeros_ip_firewall_filter" "input_drop_wan" {
-  chain        = "input"
-  action       = "drop"
-  in_interface = var.wan_interface
-  comment      = "Drop all WAN input"
-}
-
-resource "routeros_ip_firewall_filter" "input_accept_lan" {
-  chain        = "input"
-  action       = "accept"
-  in_interface = var.bridge_name
-  comment      = "Accept LAN management input"
-}
-
-# === forward chain ===
-
-resource "routeros_ip_firewall_filter" "forward_established" {
-  chain            = "forward"
-  action           = "accept"
-  connection_state = "established,related"
-  comment          = "Accept established and related forward"
-}
-
-# Block Guest to internal VLANs
-
-resource "routeros_ip_firewall_filter" "drop_guest_to_iot" {
-  chain       = "forward"
-  action      = "drop"
-  src_address = var.guest_subnet
-  dst_address = var.iot_subnet
-  comment     = "Drop Guest -> IoT"
-}
-
-resource "routeros_ip_firewall_filter" "drop_guest_to_lan" {
-  chain       = "forward"
-  action      = "drop"
-  src_address = var.guest_subnet
-  dst_address = var.lan_subnet
-  comment     = "Drop Guest -> LAN"
-}
-
-# Block IoT to LAN (exceptions follow below)
-
-resource "routeros_ip_firewall_filter" "drop_iot_to_lan" {
-  chain       = "forward"
-  action      = "drop"
-  src_address = var.iot_subnet
-  dst_address = var.lan_subnet
-  comment     = "Drop IoT -> LAN (exceptions below)"
-}
-
-# IoT-to-LAN exceptions (Home Assistant + AdGuard DNS)
-
-resource "routeros_ip_firewall_filter" "iot_ha" {
-  chain       = "forward"
-  action      = "accept"
-  src_address = var.iot_subnet
-  dst_address = var.server_ip
-  protocol    = "tcp"
-    dst_port    = lookup(var.server_ports, "ha", "8123")
-  comment     = "Allow IoT -> Home Assistant"
-}
-
-resource "routeros_ip_firewall_filter" "iot_dns_udp" {
-  chain       = "forward"
-  action      = "accept"
-  src_address = var.iot_subnet
-  dst_address = var.server_ip
-  protocol    = "udp"
-    dst_port    = lookup(var.dns_ports, "udp", "53")
-  comment     = "Allow IoT -> DNS (UDP)"
-}
-
-resource "routeros_ip_firewall_filter" "iot_dns_tcp" {
-  chain       = "forward"
-  action      = "accept"
-  src_address = var.iot_subnet
-  dst_address = var.server_ip
-  protocol    = "tcp"
-    dst_port    = lookup(var.dns_ports, "tcp", "53")
-  comment     = "Allow IoT -> DNS (TCP)"
-}
-
-# Block LAN to IoT and Guest
-
-resource "routeros_ip_firewall_filter" "drop_lan_to_iot" {
-  chain       = "forward"
-  action      = "drop"
-  src_address = var.lan_subnet
-  dst_address = var.iot_subnet
-  comment     = "Drop LAN -> IoT"
-}
-
-resource "routeros_ip_firewall_filter" "drop_lan_to_guest" {
-  chain       = "forward"
-  action      = "drop"
-  src_address = var.lan_subnet
-  dst_address = var.guest_subnet
-  comment     = "Drop LAN -> Guest"
-}
-
-# Allow VLAN traffic to WAN
-
-resource "routeros_ip_firewall_filter" "forward_iot_wan" {
-  chain         = "forward"
-  action        = "accept"
-  src_address   = var.iot_subnet
-  out_interface = var.wan_interface
-  comment       = "Allow IoT -> WAN"
-}
-
-resource "routeros_ip_firewall_filter" "forward_lan_wan" {
-  chain         = "forward"
-  action        = "accept"
-  src_address   = var.lan_subnet
-  out_interface = var.wan_interface
-  comment       = "Allow LAN -> WAN"
-}
-
-resource "routeros_ip_firewall_filter" "forward_guest_wan" {
-  chain         = "forward"
-  action        = "accept"
-  src_address   = var.guest_subnet
-  out_interface = var.wan_interface
-  comment       = "Allow Guest -> WAN"
-}
-
-# Final catch-all drop
-
-resource "routeros_ip_firewall_filter" "forward_drop_all" {
-  chain  = "forward"
-  action = "drop"
-  comment = "Drop all remaining forward traffic"
-}
-
-# === NAT ===
-
-resource "routeros_ip_firewall_nat" "masquerade_iot" {
-  chain         = "srcnat"
-  action        = "masquerade"
-  src_address   = var.iot_subnet
-  out_interface = var.wan_interface
-  comment       = "NAT masquerade IoT"
-}
-
-resource "routeros_ip_firewall_nat" "masquerade_lan" {
-  chain         = "srcnat"
-  action        = "masquerade"
-  src_address   = var.lan_subnet
-  out_interface = var.wan_interface
-  comment       = "NAT masquerade LAN"
-}
-
-resource "routeros_ip_firewall_nat" "masquerade_guest" {
-  chain         = "srcnat"
-  action        = "masquerade"
-  src_address   = var.guest_subnet
-  out_interface = var.wan_interface
-  comment       = "NAT masquerade Guest"
+  action                   = each.value.action
+  chain                    = each.value.chain
+  address_list             = each.value.address_list
+  address_list_timeout     = each.value.address_list_timeout
+  comment                  = each.value.comment
+  connection_bytes         = each.value.connection_bytes
+  connection_limit         = each.value.connection_limit
+  connection_mark          = each.value.connection_mark
+  connection_rate          = each.value.connection_rate
+  connection_type          = each.value.connection_type
+  content                  = each.value.content
+  disabled                 = each.value.disabled
+  dscp                     = each.value.dscp
+  dst_address              = each.value.dst_address
+  dst_address_list         = each.value.dst_address_list
+  dst_address_type         = each.value.dst_address_type
+  dst_limit                = each.value.dst_limit
+  dst_port                 = each.value.dst_port
+  fragment                 = each.value.fragment
+  hotspot                  = each.value.hotspot
+  icmp_options             = each.value.icmp_options
+  in_bridge_port           = each.value.in_bridge_port
+  in_bridge_port_list      = each.value.in_bridge_port_list
+  in_interface             = each.value.in_interface
+  in_interface_list        = each.value.in_interface_list
+  ingress_priority         = each.value.ingress_priority
+  ipsec_policy             = each.value.ipsec_policy
+  ipv4_options             = each.value.ipv4_options
+  jump_target              = each.value.jump_target
+  layer7_protocol          = each.value.layer7_protocol
+  limit                    = each.value.limit
+  log                      = each.value.log
+  log_prefix               = each.value.log_prefix
+  nth                      = each.value.nth
+  out_bridge_port          = each.value.out_bridge_port
+  out_bridge_port_list     = each.value.out_bridge_port_list
+  out_interface            = each.value.out_interface
+  out_interface_list       = each.value.out_interface_list
+  packet_mark              = each.value.packet_mark
+  packet_size              = each.value.packet_size
+  per_connection_classifier = each.value.per_connection_classifier
+  place_before             = each.value.place_before
+  port                     = each.value.port
+  priority                 = each.value.priority
+  protocol                 = each.value.protocol
+  psd                      = each.value.psd
+  random                   = each.value.random
+  randomise_ports          = each.value.randomise_ports
+  routing_mark             = each.value.routing_mark
+  same_not_by_dst          = each.value.same_not_by_dst
+  socks5_port              = each.value.socks5_port
+  socks5_server            = each.value.socks5_server
+  socksify_service         = each.value.socksify_service
+  src_address              = each.value.src_address
+  src_address_list         = each.value.src_address_list
+  src_address_type         = each.value.src_address_type
+  src_mac_address          = each.value.src_mac_address
+  src_port                 = each.value.src_port
+  tcp_mss                  = each.value.tcp_mss
+  time                     = each.value.time
+  to_addresses             = each.value.to_addresses
+  to_ports                 = each.value.to_ports
+  ttl                      = each.value.ttl
 }

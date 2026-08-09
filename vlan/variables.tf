@@ -60,3 +60,21 @@ variable "use_service_tag" {
   type        = bool
   default     = null
 }
+
+variable "loop_protect" {
+  description = "Loop protect setting"
+  type        = string
+  default     = null
+}
+
+variable "loop_protect_disable_time" {
+  description = "Time to disable interface after loop detected"
+  type        = string
+  default     = null
+}
+
+variable "loop_protect_send_interval" {
+  description = "Interval for sending loop protect packets"
+  type        = string
+  default     = null
+}

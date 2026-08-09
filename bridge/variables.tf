@@ -218,3 +218,33 @@ variable "transmit_hold_count" {
   type        = number
   default     = null
 }
+
+variable "add_dhcp_option82" {
+  description = "Whether to add DHCP Option-82 information"
+  type        = bool
+  default     = null
+}
+
+variable "ether_type" {
+  description = "EtherType for VLAN-tagged packets"
+  type        = string
+  default     = null
+}
+
+variable "forward_reserved_addresses" {
+  description = "Forward IEEE reserved multicast MAC addresses"
+  type        = bool
+  default     = null
+}
+
+variable "mld_version" {
+  description = "MLD version for IPv6 multicast"
+  type        = number
+  default     = null
+}
+
+variable "pvid" {
+  description = "Port VLAN ID for untagged ingress traffic"
+  type        = number
+  default     = null
+}

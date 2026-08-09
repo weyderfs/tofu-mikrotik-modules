@@ -14,12 +14,6 @@ variable "pvid" {
   default     = 1
 }
 
-variable "tagged_vlans" {
-  description = "List of VLAN IDs allowed as tagged on this trunk port. Empty list means access port."
-  type        = list(number)
-  default     = []
-}
-
 variable "comment" {
   description = "Comment for the bridge port"
   type        = string

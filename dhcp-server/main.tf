@@ -1,12 +1,12 @@
 resource "routeros_ip_pool" "this" {
-  name    = format("pool-%s", var.vlan_name)
+  name    = var.pool_name
   ranges  = [var.dhcp_range]
   comment = var.pool_comment
   next_pool = var.next_pool
 }
 
 resource "routeros_ip_dhcp_server" "this" {
-  name                  = format("dhcp-%s", var.vlan_name)
+  name                  = var.server_name
   interface             = var.vlan_interface
   address_pool          = routeros_ip_pool.this.name
   lease_time            = var.lease_time
@@ -45,6 +45,7 @@ resource "routeros_ip_dhcp_server_network" "this" {
   boot_file_name      = var.boot_file_name
   caps_manager        = var.caps_manager
   dhcp_option         = var.dhcp_option
+  dhcp_option_set     = var.dhcp_option_set
   dns_none            = var.dns_none
   domain              = var.domain
   netmask             = var.netmask

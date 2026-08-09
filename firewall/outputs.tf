@@ -1,12 +1,9 @@
-output "filter_rules_applied" {
-  description = "Number of filter rules provisioned"
-  value = (
-    4   # input chain
-    + 12  # forward chain
-  )
+output "filter_rules" {
+  description = "Firewall filter rules created"
+  value       = routeros_ip_firewall_filter.this
 }
 
-output "nat_rules_applied" {
-  description = "Number of NAT masquerade rules provisioned"
-  value       = 3
+output "nat_rules" {
+  description = "Firewall NAT rules created"
+  value       = routeros_ip_firewall_nat.this
 }

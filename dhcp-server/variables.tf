@@ -1,8 +1,3 @@
-variable "vlan_name" {
-  description = "Descriptive VLAN name for DHCP naming"
-  type        = string
-}
-
 variable "vlan_interface" {
   description = "VLAN interface name to bind DHCP server to"
   type        = string
@@ -191,12 +186,6 @@ variable "use_reconfigure" {
   default     = null
 }
 
-variable "network_comment" {
-  description = "Comment for DHCP network block"
-  type        = string
-  default     = null
-}
-
 variable "boot_file_name" {
   description = "Boot filename for DHCP"
   type        = string
@@ -254,5 +243,21 @@ variable "ntp_servers" {
 variable "wins_servers" {
   description = "WINS servers for DHCP clients"
   type        = list(string)
+  default     = null
+}
+
+variable "pool_name" {
+  description = "Name of the IP pool"
+  type        = string
+}
+
+variable "server_name" {
+  description = "Name of the DHCP server"
+  type        = string
+}
+
+variable "dhcp_option_set" {
+  description = "DHCP option set for the network"
+  type        = string
   default     = null
 }

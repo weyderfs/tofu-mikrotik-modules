@@ -85,3 +85,21 @@ variable "servers" {
   type        = list(string)
   default     = []
 }
+
+variable "address_list_extra_time" {
+  description = "Extra time for address list DNS records"
+  type        = string
+  default     = null
+}
+
+variable "mdns_repeat_ifaces" {
+  description = "Interfaces for mDNS repeater"
+  type        = list(string)
+  default     = null
+}
+
+variable "vrf" {
+  description = "VRF table this DNS operates on"
+  type        = string
+  default     = null
+}
