@@ -1,6 +1,6 @@
 # interface-mode
 
-Configures a physical port as a bridge port with access or trunk mode on a MikroTik router.
+Configures a physical port as a bridge port with access or trunk mode, and optionally manages PoE settings via `routeros_interface_ethernet` on MikroTik.
 
 ## Providers
 
@@ -13,6 +13,7 @@ Configures a physical port as a bridge port with access or trunk mode on a Mikro
 | Name | Type |
 |------|------|
 | routeros_interface_bridge_port.this | resource |
+| routeros_interface_ethernet.ethernet | resource |
 
 ## Input Variables
 
@@ -20,10 +21,13 @@ Configures a physical port as a bridge port with access or trunk mode on a Mikro
 |------|-------------|------|---------|:--------:|
 | port_name | Physical port name (e.g., ether2) | `string` | n/a | yes |
 | bridge_name | Bridge name to attach the port to | `string` | n/a | yes |
+| factory_name | Factory hardware identifier (e.g., ether2) | `string` | n/a | yes |
 | pvid | Primary VLAN ID for untagged traffic | `number` | `1` | no |
-| tagged_vlans | VLAN IDs allowed as tagged (empty = access port) | `list(number)` | `[]` | no |
-| comment | Comment for the bridge port | `string` | `null` (auto-generated) | no |
+| comment | Comment for the bridge port | `string` | `null` | no |
+| ethernet_comment | Comment for the ethernet interface | `string` | `null` | no |
 | disabled | Disable the bridge port | `bool` | `false` | no |
+| poe_out | PoE output mode: off, auto-on, forced-on | `string` | `null` | no |
+| poe_priority | PoE priority (0-99, lower = higher) | `number` | `null` | no |
 | auto_isolate | Prevent forwarding without BPDUs | `bool` | `null` | no |
 | bpdu_guard | Enable BPDU guard | `bool` | `null` | no |
 | broadcast_flood | Enable broadcast flood to egress ports | `bool` | `null` | no |
@@ -53,3 +57,5 @@ Configures a physical port as a bridge port with access or trunk mode on a Mikro
 | Name | Description |
 |------|-------------|
 | bridge_port_id | Resource ID of the bridge port configuration |
+| ethernet_id | Resource ID of the ethernet interface configuration |
+| ethernet_name | Name of the ethernet interface |

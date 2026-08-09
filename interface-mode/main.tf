@@ -30,15 +30,9 @@ resource "routeros_interface_bridge_port" "this" {
 }
 
 resource "routeros_interface_ethernet" "ethernet" {
-  factory_name             = var.factory_name
-  name                     = var.port_name
-  comment                  = var.ethernet_comment
-  poe_out                  = var.poe_out
-  poe_priority             = var.poe_priority
-  poe_voltage              = var.poe_voltage
-  poe_lldp_enabled         = var.poe_lldp_enabled
-  power_cycle_interval     = var.power_cycle_interval
-  power_cycle_ping_address = var.power_cycle_ping_address
-  power_cycle_ping_enabled = var.power_cycle_ping_enabled
-  power_cycle_ping_timeout = var.power_cycle_ping_timeout
+  factory_name = var.factory_name
+  name         = var.port_name
+  comment      = var.ethernet_comment
+  poe_out      = var.poe_out
+  poe_priority = var.poe_priority
 }
