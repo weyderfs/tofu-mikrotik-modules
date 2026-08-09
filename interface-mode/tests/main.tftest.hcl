@@ -1,5 +1,5 @@
 run "validate_plan" {
-  command = "plan"
+  command = plan
 
   variables = {
     port_name    = "ether5"
@@ -9,22 +9,13 @@ run "validate_plan" {
   }
 
   assert {
-    function = "plan_output"
-    expressions = {
-      planned_values = jsonencode({
-        root_module = {
-          resources = [
-            {
-              address = "routeros_interface_bridge_port.this"
-              values = {
-                port_name    = "ether5"
-                bridge_name  = "bridge-home"
-                pvid         = 20
-              }
-            }
-          ]
-        }
-      })
+    function = "planned_values"
+    expression = {
+      "routeros_interface_bridge_port.this" = {
+        port_name   = "ether5"
+        bridge_name = "bridge-home"
+        pvid        = 20
+      }
     }
   }
 }

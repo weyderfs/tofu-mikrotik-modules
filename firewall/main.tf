@@ -1,4 +1,8 @@
-# === chain: input (protect the router itself) ===
+locals {
+  ha_port = lookup(var.server_ports, "ha", "8123")
+  dns_udp_port = lookup(var.dns_ports, "udp", "53")
+  dns_tcp_port = lookup(var.dns_ports, "tcp", "53")
+}
 
 resource "routeros_ip_firewall_filter" "input_established" {
   chain            = "input"
@@ -8,10 +12,11 @@ resource "routeros_ip_firewall_filter" "input_established" {
 }
 
 resource "routeros_ip_firewall_filter" "input_icmp" {
-  chain    = "input"
-  action   = "accept"
-  protocol = "icmp"
-  comment  = "Accept ICMP input"
+  chain      = "input"
+  action     = "accept"
+  protocol   = "icmp"
+  comment    = "Accept ICMP input"
+  disabled   = var.icmp_accept ? false : null
 }
 
 resource "routeros_ip_firewall_filter" "input_drop_wan" {
@@ -28,7 +33,7 @@ resource "routeros_ip_firewall_filter" "input_accept_lan" {
   comment      = "Accept LAN management input"
 }
 
-# === chain: forward (inter-VLAN and WAN) ===
+# === forward chain ===
 
 resource "routeros_ip_firewall_filter" "forward_established" {
   chain            = "forward"
@@ -73,7 +78,7 @@ resource "routeros_ip_firewall_filter" "iot_ha" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "tcp"
-  dst_port    = "8123"
+  dst_port    = local.ha_port
   comment     = "Allow IoT -> Home Assistant"
 }
 
@@ -83,8 +88,8 @@ resource "routeros_ip_firewall_filter" "iot_dns_udp" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "udp"
-  dst_port    = "53"
-  comment     = "Allow IoT -> AdGuard DNS (UDP)"
+  dst_port    = local.dns_udp_port
+  comment     = "Allow IoT -> DNS (UDP)"
 }
 
 resource "routeros_ip_firewall_filter" "iot_dns_tcp" {
@@ -93,8 +98,8 @@ resource "routeros_ip_firewall_filter" "iot_dns_tcp" {
   src_address = var.iot_subnet
   dst_address = var.server_ip
   protocol    = "tcp"
-  dst_port    = "53"
-  comment     = "Allow IoT -> AdGuard DNS (TCP)"
+  dst_port    = local.dns_tcp_port
+  comment     = "Allow IoT -> DNS (TCP)"
 }
 
 # Block LAN to IoT and Guest
@@ -144,8 +149,8 @@ resource "routeros_ip_firewall_filter" "forward_guest_wan" {
 # Final catch-all drop
 
 resource "routeros_ip_firewall_filter" "forward_drop_all" {
-  chain   = "forward"
-  action  = "drop"
+  chain  = "forward"
+  action = "drop"
   comment = "Drop all remaining forward traffic"
 }
 
@@ -173,4 +178,17 @@ resource "routeros_ip_firewall_nat" "masquerade_guest" {
   src_address   = var.guest_subnet
   out_interface = var.wan_interface
   comment       = "NAT masquerade Guest"
+}
+
+output "filter_rules_applied" {
+  description = "Number of filter rules provisioned"
+  value = (
+    4   # input chain
+    + 12  # forward chain
+  )
+}
+
+output "nat_rules_applied" {
+  description = "Number of NAT masquerade rules provisioned"
+  value       = 3
 }

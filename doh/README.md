@@ -1,6 +1,6 @@
 # doh
 
-Configures MikroTik DNS-over-HTTPS server settings and enables remote DNS requests.
+Configures DNS over HTTPS on a MikroTik router.
 
 ## Providers
 
@@ -14,12 +14,25 @@ Configures MikroTik DNS-over-HTTPS server settings and enables remote DNS reques
 |------|------|
 | routeros_ip_dns.doh | resource |
 
-## Inputs
+## Input Variables
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| doh_upstream_url | DoH upstream URL | `string` |`"https://dns.quad9.net/dns-query"` | no |
-| doh_upstream_addresses | Upstream DNS server IPs for fallback | `list(string)` | `["[IP_ADDRESS]", "[IP_ADDRESS]"]` | no |
+| doh_upstream_url | DoH upstream URL (e.g., https://dns.quad9.net/dns-query) | `string` | n/a | yes |
+| doh_upstream_addresses | List of upstream DNS server IPs for fallback | `list(string)` | n/a | yes |
+| allow_remote_requests | Allow remote DNS requests | `bool` | `true` | no |
+| verify_doh_cert | Verify DoH certificate | `bool` | `null` | no |
+| cache_max_ttl | Maximum cache TTL | `string` | `null` | no |
+| cache_size | DNS cache size in KiB | `number` | `null` | no |
+| doh_max_concurrent_queries | Max concurrent DoH queries | `number` | `null` | no |
+| doh_max_server_connections | Max concurrent DoH connections | `number` | `null` | no |
+| doh_timeout | DoH query timeout | `string` | `null` | no |
+| max_concurrent_queries | Max concurrent DNS queries | `number` | `null` | no |
+| max_concurrent_tcp_sessions | Max concurrent TCP sessions | `number` | `null` | no |
+| max_udp_packet_size | Max UDP packet size | `number` | `null` | no |
+| query_server_timeout | Query server timeout | `string` | `null` | no |
+| query_total_timeout | Total query timeout | `string` | `null` | no |
+| servers | List of DNS server IPs (fallback when DoH unavailable) | `list(string)` | `var.doh_upstream_addresses` | no |
 
 ## Outputs
 

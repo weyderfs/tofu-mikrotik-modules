@@ -27,3 +27,27 @@ variable "server_ip" {
   description = "Server IP on VLAN 20 (AdGuard Home, Home Assistant)"
   type        = string
 }
+
+variable "server_ports" {
+  description = "Map of service names to port numbers"
+  type        = map(string)
+  default     = {}
+}
+
+variable "dns_ports" {
+  description = "DNS ports to use (default: 53)"
+  type        = list(string)
+  default     = ["53"]
+}
+
+variable "icmp_accept" {
+  description = "Accept ICMP on bridge/LAN interface"
+  type        = bool
+  default     = true
+}
+
+variable "forward_default_drop" {
+  description = "Default forward policy is drop"
+  type        = bool
+  default     = true
+}

@@ -1,5 +1,5 @@
 run "validate_plan" {
-  command = "plan"
+  command = plan
 
   variables = {
     doh_upstream_url       = "https://dns.quad9.net/dns-query"
@@ -7,21 +7,12 @@ run "validate_plan" {
   }
 
   assert {
-    function = "plan_output"
-    expressions = {
-      planned_values = jsonencode({
-        root_module = {
-          resources = [
-            {
-              address = "routeros_ip_dns.doh"
-              values = {
-                allow_remote_requests = true
-                use_doh_server        = "https://dns.quad9.net/dns-query"
-              }
-            }
-          ]
-        }
-      })
+    function = "planned_values"
+    expression = {
+      "routeros_ip_dns.doh" = {
+        allow_remote_requests = true
+        use_doh_server        = "https://dns.quad9.net/dns-query"
+      }
     }
   }
 }
