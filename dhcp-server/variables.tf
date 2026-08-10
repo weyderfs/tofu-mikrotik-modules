@@ -255,9 +255,3 @@ variable "server_name" {
   description = "Name of the DHCP server"
   type        = string
 }
-
-variable "dhcp_option_set" {
-  description = "DHCP option set for the network"
-  type        = string
-  default     = null
-}

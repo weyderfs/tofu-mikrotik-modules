@@ -1,6 +1,6 @@
 # firewall
 
-Configures firewall rules and NAT masquerade for a MikroTik router with VLAN-based segmentation.
+Creates IPv4 firewall filter and NAT rules on MikroTik. Consumer defines rules as lists of objects — no embedded rules. Exposes all `routeros_ip_firewall_filter` and `routeros_ip_firewall_nat` attributes.
 
 ## Providers
 
@@ -12,49 +12,36 @@ Configures firewall rules and NAT masquerade for a MikroTik router with VLAN-bas
 
 | Name | Type |
 |------|------|
-| routeros_ip_firewall_filter.[...] | resource (16 filter rules) |
-| routeros_ip_firewall_nat.[...] | resource (3 NAT rules) |
+| routeros_ip_firewall_filter.this | resource (one per filter_rules entry) |
+| routeros_ip_firewall_nat.this | resource (one per nat_rules entry) |
 
 ## Input Variables
 
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| wan_interface | WAN interface name (e.g., ether1) | `string` | n/a | yes |
-| bridge_name | Bridge interface name for LAN management | `string` | n/a | yes |
-| iot_subnet | IoT VLAN subnet in CIDR notation | `string` | n/a | yes |
-| lan_subnet | LAN VLAN subnet in CIDR notation | `string` | n/a | yes |
-| guest_subnet | Guest VLAN subnet in CIDR notation | `string` | n/a | yes |
-| server_ip | Server IP on VLAN 20 (AdGuard Home, Home Assistant) | `string` | n/a | yes |
-| server_ports | Map of service names to ports (e.g., {ha = "8123", dns = "53"}) | `map(string)` | `{}` | no |
-| dns_ports | DNS ports to use (default: 53) | `list(string)` | `["53"]` | no |
-| icmp_accept | Accept ICMP on bridge/LAN interface | `bool` | `true` | no |
+### filter_rules
 
-## Firewall Rules
+List of firewall filter rule objects.
 
-### Input Chain (4 rules)
-- Accept established/related connections
-- Accept ICMP (configurable)
-- Drop all WAN input
-- Accept LAN management
+Required fields:
+- `action` (string)
+- `chain` (string)
 
-### Forward Chain (12 rules)
-- Accept established/related
-- Block Guest→IoT, Guest→LAN
-- Block IoT→LAN (with exceptions)
-- Allow IoT→Home Assistant (port configurable via `server_ports.ha`)
-- Allow IoT→DNS (ports configurable via `dns_ports`)
-- Block LAN→IoT, LAN→Guest
-- Allow LAN/IoT/Guest→WAN
-- Default drop
+Optional fields (all `string` unless noted):
+`address_list`, `address_list_timeout`, `comment`, `connection_bytes`, `connection_limit`, `connection_mark`, `connection_nat_state`, `connection_rate`, `connection_state`, `connection_type`, `content`, `disabled` (bool), `dscp` (number), `dst_address`, `dst_address_list`, `dst_address_type`, `dst_limit`, `dst_port`, `fragment` (bool), `hotspot`, `hw_offload` (bool), `icmp_options`, `in_bridge_port`, `in_bridge_port_list`, `in_interface`, `in_interface_list`, `ingress_priority` (number), `ipsec_policy`, `ipv4_options`, `jump_target`, `layer7_protocol`, `limit`, `log` (bool), `log_prefix`, `nth`, `out_bridge_port`, `out_bridge_port_list`, `out_interface`, `out_interface_list`, `packet_mark`, `packet_size`, `per_connection_classifier`, `place_before`, `port`, `priority` (number), `protocol`, `psd`, `random` (number), `reject_with`, `routing_mark`, `routing_table`, `src_address`, `src_address_list`, `src_address_type`, `src_mac_address`, `src_port`, `tcp_flags`, `tcp_mss`, `time`, `tls_host`, `ttl`.
 
-### NAT Chain (3 rules)
-- Masquerade IoT subnet
-- Masquerade LAN subnet
-- Masquerade Guest subnet
+### nat_rules
+
+List of NAT rule objects.
+
+Required fields:
+- `action` (string)
+- `chain` (string)
+
+Optional fields (all `string` unless noted):
+`address_list`, `address_list_timeout`, `comment`, `connection_bytes`, `connection_limit`, `connection_mark`, `connection_rate`, `connection_type`, `content`, `disabled` (bool), `dscp` (number), `dst_address`, `dst_address_list`, `dst_address_type`, `dst_limit`, `dst_port`, `fragment` (bool), `hotspot`, `icmp_options`, `in_bridge_port`, `in_bridge_port_list`, `in_interface`, `in_interface_list`, `ingress_priority` (number), `ipsec_policy`, `ipv4_options`, `jump_target`, `layer7_protocol`, `limit`, `log` (bool), `log_prefix`, `nth`, `out_bridge_port`, `out_bridge_port_list`, `out_interface`, `out_interface_list`, `packet_mark`, `packet_size`, `per_connection_classifier`, `place_before`, `port`, `priority` (number), `protocol`, `psd`, `random` (number), `randomise_ports` (bool), `routing_mark`, `same_not_by_dst` (bool), `socks5_port` (number), `socks5_server`, `socksify_service`, `src_address`, `src_address_list`, `src_address_type`, `src_mac_address`, `src_port`, `tcp_mss`, `time`, `to_addresses`, `to_ports`, `ttl`.
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| filter_rules_applied | Number of filter rules provisioned |
-| nat_rules_applied | Number of NAT masquerade rules provisioned |
+| filter_rules | Map of created filter rule resources |
+| nat_rules | Map of created NAT rule resources |
