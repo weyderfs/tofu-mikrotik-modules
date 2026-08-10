@@ -27,8 +27,6 @@ resource "routeros_interface_bridge_port" "this" {
   trusted                 = var.trusted
   unknown_multicast_flood = var.unknown_multicast_flood
   unknown_unicast_flood   = var.unknown_unicast_flood
-
-  depends_on = [routeros_interface_ethernet.ethernet]
 }
 
 resource "routeros_interface_ethernet" "ethernet" {
