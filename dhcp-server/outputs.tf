@@ -1,9 +1,14 @@
-output "dhcp_server_name" {
-  description = "Name of the DHCP server instance"
-  value       = routeros_ip_dhcp_server.this.name
+output "server_name" {
+  description = "Nome do servidor DHCP"
+  value       = var.server_name
 }
 
-output "ip_pool_name" {
-  description = "Name of the IP pool"
-  value       = routeros_ip_pool.this.name
+output "id" {
+  description = "ID do recurso do servidor DHCP"
+  value       = routeros_ip_dhcp_server.this.id
+}
+
+output "interface" {
+  description = "Interface VLAN associada"
+  value       = var.interface
 }

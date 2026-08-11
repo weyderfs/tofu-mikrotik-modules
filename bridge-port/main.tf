@@ -28,11 +28,3 @@ resource "routeros_interface_bridge_port" "this" {
   unknown_multicast_flood = var.unknown_multicast_flood
   unknown_unicast_flood   = var.unknown_unicast_flood
 }
-
-resource "routeros_interface_ethernet" "ethernet" {
-  factory_name = var.factory_name
-  name         = var.port_name
-  comment      = var.ethernet_comment
-  poe_out      = var.poe_out
-  poe_priority = var.poe_priority
-}
