@@ -12,7 +12,7 @@ resource "routeros_ip_firewall_nat" "this" {
   connection_rate           = each.value.connection_rate
   connection_type           = each.value.connection_type
   content                   = each.value.content
-  disabled                = each.value.disabled
+  disabled                  = each.value.disabled
   dscp                      = each.value.dscp
   dst_address               = each.value.dst_address
   dst_address_list          = each.value.dst_address_list

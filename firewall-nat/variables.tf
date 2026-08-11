@@ -1,6 +1,6 @@
 variable "nat_rules" {
   description = "Lista de regras NAT do firewall"
-  type        = list(object({
+  type = list(object({
     action                    = string
     chain                     = string
     address_list              = optional(string)

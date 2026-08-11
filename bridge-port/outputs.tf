@@ -1,11 +1,11 @@
 output "port_name" {
   description = "Nome da porta na ponte"
-  value       = var.port_name
+  value       = routeros_interface_bridge_port.this.interface
 }
 
 output "bridge" {
   description = "Nome da ponte"
-  value       = var.bridge_name
+  value       = routeros_interface_bridge_port.this.bridge
 }
 
 output "id" {

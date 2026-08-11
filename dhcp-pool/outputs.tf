@@ -1,6 +1,6 @@
 output "pool_name" {
   description = "Nome do pool de IP"
-  value       = var.pool_name
+  value       = routeros_ip_pool.this.name
 }
 
 output "id" {
@@ -10,5 +10,5 @@ output "id" {
 
 output "ranges" {
   description = "Faixas de IP configuradas"
-  value       = var.ranges
+  value       = routeros_ip_pool.this.ranges
 }

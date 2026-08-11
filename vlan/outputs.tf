@@ -5,5 +5,5 @@ output "vlan_interface" {
 
 output "vlan_id" {
   description = "VLAN ID"
-  value       = var.vlan_id
+  value       = routeros_interface_vlan.this.vlan_id
 }

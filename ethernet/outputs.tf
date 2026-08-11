@@ -1,6 +1,6 @@
 output "port_name" {
   description = "Nome da porta (after rename)"
-  value       = var.port_name
+  value       = routeros_interface_ethernet.ethernet.name
 }
 
 output "id" {
@@ -10,5 +10,5 @@ output "id" {
 
 output "factory_name" {
   description = "Nome do hardware original da porta"
-  value       = var.factory_name
+  value       = routeros_interface_ethernet.ethernet.factory_name
 }

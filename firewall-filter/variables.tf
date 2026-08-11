@@ -1,6 +1,6 @@
 variable "filter_rules" {
   description = "Lista de regras de filtro do firewall"
-  type        = list(object({
+  type = list(object({
     action                    = string
     chain                     = string
     address_list              = optional(string)

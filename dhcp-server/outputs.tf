@@ -1,6 +1,6 @@
 output "server_name" {
   description = "Nome do servidor DHCP"
-  value       = var.server_name
+  value       = routeros_ip_dhcp_server.this.name
 }
 
 output "id" {
@@ -10,5 +10,5 @@ output "id" {
 
 output "interface" {
   description = "Interface VLAN associada"
-  value       = var.interface
+  value       = routeros_ip_dhcp_server.this.interface
 }

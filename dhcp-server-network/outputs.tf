@@ -1,6 +1,6 @@
 output "address" {
   description = "Endereço da rede DHCP"
-  value       = var.vlan_subnet
+  value       = routeros_ip_dhcp_server_network.this.address
 }
 
 output "id" {
