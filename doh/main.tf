@@ -15,5 +15,4 @@ resource "routeros_ip_dns" "doh" {
   query_total_timeout         = var.query_total_timeout
   address_list_extra_time     = var.address_list_extra_time
   mdns_repeat_ifaces          = var.mdns_repeat_ifaces
-  vrf                         = var.vrf
 }

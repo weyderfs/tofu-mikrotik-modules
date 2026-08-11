@@ -25,9 +25,3 @@ variable "disabled" {
   type        = bool
   default     = false
 }
-
-variable "vrf" {
-  description = "VRF table this IP address operates on"
-  type        = string
-  default     = null
-}

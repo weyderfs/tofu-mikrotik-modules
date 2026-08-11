@@ -4,5 +4,4 @@ resource "routeros_ip_address" "this" {
   comment   = var.comment
   disabled  = var.disabled
   network   = var.network
-  vrf       = var.vrf
 }

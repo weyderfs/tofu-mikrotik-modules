@@ -97,9 +97,3 @@ variable "mdns_repeat_ifaces" {
   type        = list(string)
   default     = null
 }
-
-variable "vrf" {
-  description = "VRF table this DNS operates on"
-  type        = string
-  default     = null
-}
