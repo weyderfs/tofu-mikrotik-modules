@@ -35,7 +35,6 @@ Configures DNS settings on MikroTik including DNS-over-HTTPS and standard DNS se
 | query_total_timeout | Total query timeout | `string` | `null` | no |
 | servers | List of DNS server IPs (fallback when DoH unavailable) | `list(string)` | `[]` | no |
 | verify_doh_cert | Verify DoH certificate | `bool` | `null` | no |
-| vrf | VRF table this DNS operates on | `string` | `null` | no |
 
 ## Outputs
 

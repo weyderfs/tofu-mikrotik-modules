@@ -23,7 +23,6 @@ Assigns an IP address to a VLAN interface on a MikroTik router.
 | network | Network address (auto-determined for /32, configurable for others) | `string` | `null` | no |
 | comment | Comment for the IP address | `string` | `null` (auto-generated) | no |
 | disabled | Disable the IP address | `bool` | `false` | no |
-| vrf | VRF table this IP address operates on | `string` | `null` | no |
 
 ## Outputs
 
