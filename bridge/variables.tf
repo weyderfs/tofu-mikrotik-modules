@@ -6,7 +6,7 @@ variable "bridge_name" {
 variable "vlan_filtering" {
   description = "Enable VLAN filtering on the bridge"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "comment" {

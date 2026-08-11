@@ -59,7 +59,7 @@ Creates a MikroTik hardware bridge exposing all `routeros_interface_bridge` attr
 | startup_query_count | Number of startup queries | `number` | `null` | no |
 | startup_query_interval | Startup query interval | `string` | `null` | no |
 | transmit_hold_count | Transmit hold count | `number` | `null` | no |
-| vlan_filtering | Enable VLAN filtering on the bridge | `bool` | `true` | no |
+| vlan_filtering | Enable VLAN filtering on the bridge | `bool` | `false` | no |
 
 ## Outputs
 

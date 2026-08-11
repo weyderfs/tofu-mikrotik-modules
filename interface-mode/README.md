@@ -59,3 +59,11 @@ Configures a physical port as a bridge port with access or trunk mode, and optio
 | bridge_port_id | Resource ID of the bridge port configuration |
 | ethernet_id | Resource ID of the ethernet interface configuration |
 | ethernet_name | Name of the ethernet interface |
+
+## VLAN membership
+
+Trunk/access membership is **not** configured here. Use the `bridge-vlan` module (`/interface bridge vlan`) for tagged/untagged port lists. Set `pvid` and `frame_types` on this module only.
+
+Recommended `frame_types`:
+- Access: `admit-only-untagged-and-priority-tagged` + `pvid`
+- Trunk: `admit-only-vlan-tagged`
