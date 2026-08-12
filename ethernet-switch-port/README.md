@@ -22,7 +22,6 @@ Configura o modo VLAN de uma porta do switch chip no MikroTik. Expondo todos os 
 | vlan_mode | Modo de consulta a tabela VLAN para ingresso: check, disabled, fallback, secure | `string` | `null` | no |
 | vlan_header | Ação para tráfego de egresso: add-if-missing, always-strip, leave-as-is | `string` | `null` | no |
 | default_vlan_id | ID da VLAN aplicado ao tráfego não taggeado de ingresso (access/hybrid) | `string` | `null` | no |
-| l3_hw_offloading | Level 3 hardware offloading | `bool` | `null` | no |
 
 ## Outputs
 

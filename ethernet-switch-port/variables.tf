@@ -21,8 +21,3 @@ variable "default_vlan_id" {
   default     = null
 }
 
-variable "l3_hw_offloading" {
-  description = "Level 3 hardware offloading"
-  type        = bool
-  default     = null
-}
