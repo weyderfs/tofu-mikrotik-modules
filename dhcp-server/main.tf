@@ -26,6 +26,4 @@ resource "routeros_ip_dhcp_server" "this" {
   use_framed_as_classless   = var.use_framed_as_classless
   use_radius                = var.use_radius
   use_reconfigure           = var.use_reconfigure
-
-  depends_on = [routeros_ip_pool.this]
 }
