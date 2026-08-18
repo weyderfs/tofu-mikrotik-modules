@@ -32,9 +32,9 @@ variable "ac_name" {
 }
 
 variable "add_default_route" {
-  description = "'yes' adiciona rota default via gateway remoto; 'no'/'force' também válidos"
-  type        = string
-  default     = "yes"
+  description = "Adiciona rota default via gateway remoto (true/false)"
+  type        = bool
+  default     = true
 }
 
 variable "dial_on_demand" {
