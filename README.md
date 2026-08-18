@@ -27,6 +27,7 @@ Each module manages exactly one Terraform resource type, following the AWS modul
 ### Firewall Resources
 - `firewall-filter/` - `routeros_ip_firewall_filter`
 - `firewall-nat/` - `routeros_ip_firewall_nat`
+- `firewall-mangle/` - `routeros_ip_firewall_mangle`
 
 ## Provider Requirements
 
