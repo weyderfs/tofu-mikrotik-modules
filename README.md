@@ -21,6 +21,9 @@ Each module manages exactly one Terraform resource type, following the AWS modul
 - `ip-address/` - `routeros_ip_address`
 - `dns/` - `routeros_ip_dns` (was `doh/`)
 
+### System Resources
+- `ntp-client/` - `routeros_system_ntp_client`
+
 ### Firewall Resources
 - `firewall-filter/` - `routeros_ip_firewall_filter`
 - `firewall-nat/` - `routeros_ip_firewall_nat`
