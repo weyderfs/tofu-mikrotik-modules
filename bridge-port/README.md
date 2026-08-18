@@ -57,5 +57,5 @@ Configura uma porta física como porta da ponte no MikroTik. Expondo todos os at
 
 ## Notas
 
-- Para membros de VLAN (tagged/untagged), use o módulo `bridge-vlan`
+- Para membros de VLAN (tagged/untagged), não use o módulo `bridge-vlan` — **deprecated**: VLAN filtering via bridge não é suportado com hardware offload no QCA8337 (RB960PGS). Use `ethernet-switch-vlan` + `ethernet-switch-port` (`vlan_mode=secure`)
 - A configuração de `pvid` e `frame_types` controla o tipo de porta (acesso/trunk)

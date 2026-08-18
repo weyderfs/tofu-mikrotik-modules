@@ -9,7 +9,7 @@ Each module manages exactly one Terraform resource type, following the AWS modul
 ### Interface Resources
 - `bridge/` - `routeros_interface_bridge`
 - `bridge-port/` - `routeros_interface_bridge_port`
-- `bridge-vlan/` - `routeros_interface_bridge_vlan`
+- `bridge-vlan/` - `routeros_interface_bridge_vlan` (DEPRECATED — veja README do módulo)
 - `vlan/` - `routeros_interface_vlan`
 - `ethernet/` - `routeros_interface_ethernet`
 
