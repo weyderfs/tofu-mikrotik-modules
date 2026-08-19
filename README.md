@@ -13,6 +13,7 @@ Each module manages exactly one Terraform resource type, following the AWS modul
 - `vlan/` - `routeros_interface_vlan`
 - `ethernet/` - `routeros_interface_ethernet`
 - `pppoe-client/` - `routeros_interface_pppoe_client`
+- `interface-list-member/` - `routeros_interface_list_member`
 
 ### IP Resources
 - `dhcp-pool/` - `routeros_ip_pool`
